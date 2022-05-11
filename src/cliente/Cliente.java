@@ -49,10 +49,12 @@ public class Cliente {
 
 	public void sendMessageText(String txtMessage) throws IOException {
 		this.sendMessage(new Message(this.message.getCliente(), txtMessage));
+		this.index.updatedPanelMessage(this.message.getCliente() + ": " + txtMessage);
 	}
 	
 	public void sendMessage(Message message) {
 		try {
+
 			bos = new BufferedOutputStream(this.socket.getOutputStream());
 			byte[] bytea = this.serializarMessage(message);
 			bos.write(bytea);
@@ -84,7 +86,7 @@ public class Cliente {
 				arquivo.setTamanhoKB(kbSize);
 				
 				Message msg = new Message(message.getCliente(), arquivo);
-
+				this.index.updatedPanelMessage("Arquivo enviado: " + msg.getArquivo().getNome());
 				sendMessage(msg);
 
 			} catch (IOException e) {
@@ -110,12 +112,10 @@ public class Cliente {
 	private class ListenerSocket implements Runnable {
 
 		private Socket socket;
-		//private ObjectInputStream inputStream;
 		private Index index;
 
 		public ListenerSocket(Socket clienteSocket, Index index) {
 			this.socket = clienteSocket;
-			//this.inputStream = new ObjectInputStream(clienteSocket.getInputStream());
 			this.index = index;
 		}
 
@@ -135,6 +135,7 @@ public class Cliente {
 					}
 					if(message.getArquivo() != null) {
 						this.salvarArquivo(message);
+						this.index.updatedPanelMessage(message.getCliente() + " enviou um arquivo: " + message.getArquivo().getNome());
 					}
 				}
 				

@@ -115,7 +115,6 @@ public class Index {
 	private void sendMessage(String message) {
 		try {
 			this.cliente.sendMessageText(message);
-			updatedPanelMessage(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
