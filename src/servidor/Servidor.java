@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import cliente.models.Message;
 
 public class Servidor {
@@ -54,11 +56,11 @@ public class Servidor {
 					byte[] objectAsByte = new byte[this.socket.getReceiveBufferSize()];
 					bf.read(objectAsByte);
 					message = (Message) getObjectFromByte(objectAsByte);
-					clientesSocket.put(message.getCliente(), this.socket.getOutputStream());
+					clientesSocket.put(message.getNome(), this.socket.getOutputStream());
 					
 					if(message.getMsg() != null || message.getArquivo() != null) {
 						for(Map.Entry<String, OutputStream> kv: clientesSocket.entrySet()) {
-							if(!message.getCliente().equals(kv.getKey())) {
+							if(!message.getNome().equals(kv.getKey())) {
 								sendMessage(message, kv.getValue());
 							}
 						}
@@ -66,8 +68,8 @@ public class Servidor {
 					
 				}
 			}catch(Exception e) {
-				clientesSocket.remove(message.getCliente());
-				System.out.println(message.getCliente() + " desconectou!");
+				clientesSocket.remove(message.getNome());
+				System.out.println(message.getNome() + " desconectou!");
 			}		
 		}
 		
@@ -79,7 +81,7 @@ public class Servidor {
 				bos.flush();
 				
 			} catch (Exception e) {
-				System.out.println("Error ao enviar a mensagem: " + e);
+				JOptionPane.showMessageDialog(null, "Houve um error no servidor ao tentar transmitir a mensagem");
 			}
 			
 		}

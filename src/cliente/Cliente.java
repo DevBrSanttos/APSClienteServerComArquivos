@@ -29,15 +29,21 @@ public class Cliente {
 	private Message message;
 	private BufferedOutputStream bos;
 
-	public Cliente(Index index) throws IOException {
-		this.index = index;
-		this.socket = new Socket(SERVER_ADDRESS, PORT);
+	public Cliente(Index index){
+		try {
+			this.index = index;
+			this.socket = new Socket(SERVER_ADDRESS, PORT);
+			
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Error ao tentar se conectar ao servidor", "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 		
 		new Thread(new ListenerSocket(socket, index)).start();
 		init();
 	}
 
-	public void init() throws IOException {
+	public void init() {
 		String nome = "";
 		while (nome.isEmpty())
 			nome = JOptionPane.showInputDialog("Digite seu nome");
@@ -48,8 +54,8 @@ public class Cliente {
 	}
 
 	public void sendMessageText(String txtMessage) throws IOException {
-		this.sendMessage(new Message(this.message.getCliente(), txtMessage));
-		this.index.updatedPanelMessage(this.message.getCliente() + ": " + txtMessage);
+		this.sendMessage(new Message(this.message.getNome(), txtMessage));
+		this.index.updatedPanelMessage(this.message.getNome() + ": " + txtMessage);
 	}
 	
 	public void sendMessage(Message message) {
@@ -61,7 +67,7 @@ public class Cliente {
 			bos.flush();
 			
 		} catch (Exception e) {
-			System.out.println("Error ao enviar a mensagem: " + e);
+			JOptionPane.showMessageDialog(null, "Mensagem não enviada, tente mais tarde.");
 		}
 		
 	}
@@ -85,12 +91,12 @@ public class Cliente {
 				arquivo.setConteudo(bFile);
 				arquivo.setTamanhoKB(kbSize);
 				
-				Message msg = new Message(message.getCliente(), arquivo);
+				Message msg = new Message(message.getNome(), arquivo);
 				this.index.updatedPanelMessage("Arquivo enviado: " + msg.getArquivo().getNome());
 				sendMessage(msg);
 
 			} catch (IOException e) {
-				System.out.println("Erro enviar arquivo: " + e);
+				JOptionPane.showMessageDialog(null, "Error ao tentar enviar o arquivo", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -131,11 +137,11 @@ public class Cliente {
 					message = (Message) getObjectFromByte(objectAsByte);
 					
 					if(message.getMsg() != null) {
-						this.index.updatedPanelMessage(message.getCliente() + ": " + message.getMsg());
+						this.index.updatedPanelMessage(message.getNome() + ": " + message.getMsg());
 					}
 					if(message.getArquivo() != null) {
 						this.salvarArquivo(message);
-						this.index.updatedPanelMessage(message.getCliente() + " enviou um arquivo: " + message.getArquivo().getNome());
+						this.index.updatedPanelMessage(message.getNome() + " enviou um arquivo: " + message.getArquivo().getNome());
 					}
 				}
 				

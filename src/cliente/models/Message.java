@@ -5,32 +5,32 @@ import java.io.Serializable;
 public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private String Cliente;
+	private String nome;
 	private Arquivo arquivo;
 	private String msg;
 	
-	public Message(String cliente, Arquivo arquivo) {
-		Cliente = cliente;
+	public Message(String nome, Arquivo arquivo) {
+		this.nome = nome;
 		this.setArquivo(arquivo);
 	}
 	
-	public Message(String cliente, String msg) {
-		Cliente = cliente;
+	public Message(String nome, String msg) {
+		this.nome = nome;
 		this.msg = msg;
 	}
 	
 	public Message(String cliente) {
-		Cliente = cliente;
+		nome = cliente;
 	}
 	
 	public Message() {}
 
-	public String getCliente() {
-		return Cliente;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setCliente(String cliente) {
-		Cliente = cliente;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getMsg() {

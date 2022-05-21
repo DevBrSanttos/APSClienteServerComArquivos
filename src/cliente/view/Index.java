@@ -17,15 +17,14 @@ import javax.swing.JTextField;
 
 import cliente.Cliente;
 
-
 public class Index {
-	
+
 	private JFrame frame;
 	private JTextField txtMessage;
 	private JTabbedPane tabbedPane;
 	private JLabel lblNome;
 	private JTextArea chat;
-	
+
 	private Cliente cliente;
 
 	public static void main(String[] args) {
@@ -40,16 +39,12 @@ public class Index {
 			}
 		});
 	}
-	
+
 	public Index() {
-		try {
-			initialize();
-			cliente = new Cliente(this);
-		} catch (IOException e) {
-			System.out.println("Error no cliente: " + e);
-		}
+		initialize();
+		cliente = new Cliente(this);
 	}
-	
+
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 586, 448);
@@ -76,7 +71,7 @@ public class Index {
 		});
 		btnEnviar.setBounds(326, 368, 109, 32);
 		frame.getContentPane().add(btnEnviar);
-		
+
 		JButton btnEnviarArquivo = new JButton("Arquivo");
 		btnEnviarArquivo.addMouseListener(new MouseAdapter() {
 			@Override
@@ -87,13 +82,13 @@ public class Index {
 
 		btnEnviarArquivo.setBounds(445, 368, 109, 32);
 		frame.getContentPane().add(btnEnviarArquivo);
-		
+
 		lblNome = new JLabel("New label");
 		lblNome.setBounds(10, 11, 144, 20);
 		frame.getContentPane().add(lblNome);
 		newPane("Geral");
 	}
-	
+
 	private void newPane(String titulo) {
 		JPanel newPanel = new JPanel();
 		newPanel.setLayout(null);
@@ -107,19 +102,19 @@ public class Index {
 		scroll.setBounds(0, 0, 425, 323);
 		newPanel.add(scroll);
 	}
-	
+
 	public void updatedPanelMessage(String message) {
 		this.chat.setText(this.chat.getText() + message + "\n");
 	}
-	
+
 	private void sendMessage(String message) {
 		try {
 			this.cliente.sendMessageText(message);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-	
+
 	private void sendFile() {
 		try {
 			this.cliente.sendFile();
@@ -127,9 +122,9 @@ public class Index {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setLabel(String nome) {
 		this.lblNome.setText("Bem vindo " + nome);
 	}
-	
+
 }
